@@ -3,8 +3,11 @@
 // this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use lang::Lang;
-use error::Result;
+use error::{Result, Error};
 use macrogen;
+
+use std::fs::File;
+use std::io::Write;
 
 /// Main struct for initiating localization for a project.
 ///
@@ -50,5 +53,16 @@ impl Localizer {
     /// Generate the `localization_macros.rs` file.
     pub fn generate_macro_file(mut self) -> String {
         macrogen::generate_macro_file(&mut self.langs)
+    }
+
+    /// Write the `localization_macros.rs` file to a file.
+    pub fn write_macro_file(self, file: &str) -> Result<()> {
+        let mut f = try!(File::create(file).map_err(|e| Error::new(format!("Could not create file {}: {}",
+                                                                              file, e))));
+        let content = self.generate_macro_file();
+        try!(f.write_all(content.as_bytes())
+             .map_err(|e| Error::new(format!("Could not write to file {}: {}",
+                                             file, e))));
+        Ok(())
     }
 }
