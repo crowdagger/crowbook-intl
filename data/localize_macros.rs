@@ -33,17 +33,3 @@ pub fn __get_lang() -> RwLockReadGuard<'static, String> {
     LANG.read().unwrap()
 }
 
-/// Localized format macro (or `lformat!` in short)
-/// Should be similar to `format!`, except strings are localized
-#[macro_export] macro_rules! lformat {
-    ($msg:expr) => ({
-        let __guard = $crate::localize_macros::__get_lang();
-        let __lang: &str = __guard.as_str();
-        localize!(__lang, $msg)
-    });
-    ($msg:expr, $($arg:tt)*) => ({
-        let __guard = $crate::localize_macros::__get_lang();
-        let __lang: &str = __guard.as_str();
-        localize!(__lang, $msg, $($arg)*)
-    });
-}
