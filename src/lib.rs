@@ -9,5 +9,5 @@ mod lang;
 mod error;
 
 pub use lang::Lang;
-pub use macrogen::generate_localize;
+pub use macrogen::{generate_localize, generate_macro_file};
 pub use error::{Error, Result};
