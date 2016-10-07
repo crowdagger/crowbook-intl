@@ -4,6 +4,8 @@
 
 mod macrogen;
 mod lang;
+mod error;
 
 pub use lang::Lang;
 pub use macrogen::generate_localize;
+pub use error::{Error, Result};
