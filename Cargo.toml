@@ -1,6 +1,6 @@
 [package]
 name = "crowbook-localize"
-version = "0.0.1"
+version = "0.0.2"
 authors = ["Elisabeth Henry <liz.henry@ouvaton.org>"]
 description = "A dirty an ugly library to localize strings in Rust."
 readme = "README.md"
