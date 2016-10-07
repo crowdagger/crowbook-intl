@@ -8,6 +8,8 @@ use lang::Lang;
 pub fn generate_localize(langs: &mut [Lang]) -> String {
     let mut output = String::new();
 
+    output.push_str("/// This macro was generated automatically, do not edit manually\n");
+    output.push_str("#[macro_export]\n");
     output.push_str("macro_rules! localize {\n");
 
     for i in 0..langs.len() {
