@@ -5,6 +5,11 @@
 //!
 //! ```rust, no_run
 //! #[macro_use] mod localize_macros;
+//! use localize_macros::set_lang;
+//! set_lang("en");
+//! lformat!("Hello, {}", name);
+//! set_lang("fr");
+//! lformat!("Hello, {}", name);
 //! ```
 
 use std::sync::RwLock;
@@ -21,7 +26,10 @@ pub fn set_lang<S>(lang: S)
 }
 
 /// Get the lang (or a guard on it)
-pub fn get_lang() -> RwLockReadGuard<'static, String> {
+///
+/// This function should not be used directly
+#[doc(hidden)]
+pub fn __get_lang() -> RwLockReadGuard<'static, String> {
     LANG.read().unwrap()
 }
 
@@ -29,12 +37,12 @@ pub fn get_lang() -> RwLockReadGuard<'static, String> {
 /// Should be similar to `format!`, except strings are localized
 #[macro_export] macro_rules! lformat {
     ($msg:expr) => ({
-        let __guard = $crate::localize_macros::get_lang();
+        let __guard = $crate::localize_macros::__get_lang();
         let __lang: &str = __guard.as_str();
         localize!(__lang, $msg)
     });
     ($msg:expr, $($arg:tt)*) => ({
-        let __guard = $crate::localize_macros::get_lang();
+        let __guard = $crate::localize_macros::__get_lang();
         let __lang: &str = __guard.as_str();
         localize!(__lang, $msg, $($arg)*)
     });

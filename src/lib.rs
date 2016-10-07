@@ -7,7 +7,9 @@ extern crate rustc_serialize;
 mod macrogen;
 mod lang;
 mod error;
+mod localizer;
 
 pub use lang::Lang;
 pub use macrogen::{generate_localize, generate_macro_file};
 pub use error::{Error, Result};
+pub use localizer::Localizer;

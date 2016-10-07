@@ -1,6 +1,6 @@
 extern crate crowbook_localize;
 
-use crowbook_localize::{Lang, generate_macro_file};
+use crowbook_localize::Localizer;
 
 fn main() {
     let str_fr = r#"
@@ -18,7 +18,8 @@ msgstr "hola, {}"
 msgid "Oi!"
 msgstr "¡Oi!"
 "#;
-    let fr = Lang::new_from_str("fr", str_fr).unwrap();
-    let es = Lang::new_from_str("es", str_es).unwrap();
-    println!("{}", generate_macro_file(&mut [fr, es]));
+    let mut localizer = Localizer::new();
+    localizer.add_lang("fr", str_fr).unwrap();
+    localizer.add_lang("es", str_es).unwrap();
+    println!("{}", localizer.generate_macro_file());
 }
