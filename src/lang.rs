@@ -35,17 +35,6 @@ impl Lang {
     /// msgid "Initial string"
     /// msgstr "Translated string"
     /// ```
-    ///
-    /// # Example
-    ///
-    /// ```
-    /// use crowbook_localize::Lang;
-    /// let s = r#"
-    /// msgid "Foo"
-    /// msgstr "Bar"
-    /// "#;
-    /// let lang = Lang::new_from_str("foo", s).unwrap();
-    /// ```
     pub fn new_from_str<S>(lang: S, s: &str) -> Result<Lang>
         where S: Into<String> {
         let mut lang = Self::new(lang);

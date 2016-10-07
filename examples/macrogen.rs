@@ -7,6 +7,9 @@ fn main() {
 msgid "hello, {}"
 msgstr "bonjour, {}"
 
+msgid "Shit: \"{}\" went wrong;"
+msgstr "Chiotte: \"{}\" est parti en live;"
+
 msgid "kwak!"
 msgstr "coin !"
 "#;

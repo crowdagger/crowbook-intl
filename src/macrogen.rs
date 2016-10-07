@@ -4,74 +4,6 @@
 
 use lang::Lang;
 
-/// Generate the localize! macro
-pub fn generate_localize(langs: &mut [Lang]) -> String {
-    let mut output = String::new();
-
-    output.push_str("/// This macro was generated automatically, do not edit manually\n");
-    output.push_str("#[macro_export]\n");
-    output.push_str("macro_rules! localize {\n");
-    output.push_str("    ($lang:expr, $msg:expr, $($arg:tt)*) => (\n");
-    output.push_str("        match ($lang, $msg) {\n");
-
-    let mut noarg_variant = String::new();
-    noarg_variant.push_str("    ($lang:expr, $msg: expr) => (\n");
-    noarg_variant.push_str("        match ($lang, $msg) {\n");
-    
-    for i in 0..langs.len() {
-        let (curr, rest) = langs.split_at_mut(i + 1);
-        let ref mut hash = curr[i].content;
-        for (key, value) in hash {
-            let b = has_arguments(key);
-            if b {
-                output.push_str(&format!("            (\"{}\", \"{}\") => format!(\"{}\", $($arg)*),\n",
-                                         curr[i].lang,
-                                         key,
-                                         value));
-            } else {
-                noarg_variant.push_str(&format!("            (\"{}\", \"{}\") => format!(\"{}\"),\n",
-                                                curr[i].lang,
-                                                key,
-                                                value));                
-            }
-            for other_lang in rest.iter_mut() {
-                let ref mut hash = other_lang.content;
-                if let Some(value) = hash.remove(key) {
-                    if b {
-                        output.push_str(&format!("            (\"{}\", \"{}\") => format!(\"{}\", $($arg)*),\n",
-                                                 other_lang.lang,
-                                                 key,
-                                                 value));
-                    } else {
-                        noarg_variant.push_str(&format!("            (\"{}\", \"{}\") => format!(\"{}\"),\n",
-                                                        other_lang.lang,
-                                                        key,
-                                                        value));
-                    }
-                }
-            }
-            if b {
-                output.push_str(&format!("            (_, \"{}\") => format!(\"{}\", $($arg)*),\n",
-                                         key,
-                                         key));
-            } else {
-                noarg_variant.push_str(&format!("            (_, \"{}\") => format!(\"{}\"),\n",
-                                                key,
-                                                key));
-            }
-        }
-    }
-    output.push_str("            (_, _) => format!($msg, $($arg)*),\n");
-    output.push_str("        });\n");
-    noarg_variant.push_str("            (_, _) => format!($msg),\n");
-    noarg_variant.push_str("        });\n");
-    output.push_str(&noarg_variant);
-    output.push_str("}\n");
-    
-    output
-}
-
-
 /// Generate the `lformat!` macro
 pub fn generate_lformat(langs: &mut [Lang]) -> String {
     let mut arg_variant = String::new();
@@ -84,11 +16,11 @@ pub fn generate_lformat(langs: &mut [Lang]) -> String {
             let b = has_arguments(key);
             let mut inner = String::new();
             if b {
-                inner.push_str(&format!("            \"{}\" => format!(\"{}\", $($arg)*),\n",
+                inner.push_str(&format!("            \"{}\" => format!({:?}, $($arg)*),\n",
                                        curr[i].lang,
                                        value));
             } else {
-                inner.push_str(&format!("            \"{}\" => format!(\"{}\"),\n",
+                inner.push_str(&format!("            \"{}\" => format!({:?}),\n",
                                        curr[i].lang,
                                        value));
             }
@@ -97,11 +29,11 @@ pub fn generate_lformat(langs: &mut [Lang]) -> String {
                 let ref mut hash = other_lang.content;
                 if let Some(value) = hash.remove(key) {
                     if b {
-                        inner.push_str(&format!("            \"{}\" => format!(\"{}\", $($arg)*),\n",
+                        inner.push_str(&format!("            \"{}\" => format!({:?}, $($arg)*),\n",
                                                 other_lang.lang,
                                                 value));
                     } else {
-                        inner.push_str(&format!("            \"{}\" => format!(\"{}\"),\n",
+                        inner.push_str(&format!("            \"{}\" => format!({:?}),\n",
                                                         other_lang.lang,
                                                         value));
                     }
@@ -110,10 +42,10 @@ pub fn generate_lformat(langs: &mut [Lang]) -> String {
 
             
             if b {
-                inner.push_str(&format!("            _ => format!(\"{}\", $($arg)*),\n",
+                inner.push_str(&format!("            _ => format!({:?}, $($arg)*),\n",
                                         key));
             } else {
-                inner.push_str(&format!("            _ => format!(\"{}\"),\n",
+                inner.push_str(&format!("            _ => format!({:?}),\n",
                                         key));
             }
             
@@ -123,12 +55,12 @@ pub fn generate_lformat(langs: &mut [Lang]) -> String {
             inner);
 
             if b {
-                arg_variant.push_str(&format!("    (\"{}\", $($arg:tt)*) => ({{
+                arg_variant.push_str(&format!("    ({:?}, $($arg:tt)*) => ({{
 {}
     }});\n",
                 key, this_variant));
             } else {
-                noarg_variant.push_str(&format!("    (\"{}\") => ({{
+                noarg_variant.push_str(&format!("    ({:?}) => ({{
 {}
     }});\n",
                 key, this_variant));
