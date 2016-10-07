@@ -26,6 +26,7 @@ use std::io::Write;
 /// let mut localizer = Localizer::new();
 /// localizer.add_lang("fr", fr).unwrap();
 /// localizer.add_lang("es", es).unwrap();
+/// println!("{}", localizer.generate_macro_file());
 /// ```
 pub struct Localizer {
     langs: Vec<Lang>,
