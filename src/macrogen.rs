@@ -4,8 +4,6 @@
 
 use lang::Lang;
 
-use std::collections::HashMap;
-
 /// Generate the localize! macro
 pub fn generate_localize(langs: &mut [Lang]) -> String {
     let mut output = String::new();

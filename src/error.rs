@@ -10,6 +10,7 @@ use std::fmt;
 #[derive(Debug, PartialEq)]
 enum ErrorType {
     Default,
+    Parse,
 }
 
 /// Result type (returned by most methods of this library)
@@ -30,6 +31,14 @@ impl Error {
             variant: ErrorType::Default,
         }
     }
+
+    /// Creates a new parse error
+    pub fn parse<S: Into<String>>(msg: S) -> Error {
+        Error {
+            msg: msg.into(),
+            variant: ErrorType::Parse,
+        }
+    }
 }
 
 impl error::Error for Error {
@@ -40,7 +49,10 @@ impl error::Error for Error {
 
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}", self.msg)
+        match self.variant {
+            ErrorType::Parse => write!(f, "Error parsing localization file: {}", self.msg),
+            _ => write!(f, "{}", self.msg),
+        }
     }
 }
 
