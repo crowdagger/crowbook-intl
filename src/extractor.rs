@@ -4,6 +4,7 @@
 
 use message::Message;
 use error::{Error, Result};
+use common::find_string;
 
 use std::collections::HashMap;
 use std::path::Path;
@@ -124,29 +125,3 @@ impl Extractor {
     }
 }
 
-fn find_string(bytes: &[u8]) -> Result<String> {
-    let mut begin = None;
-    let mut i = 0;
-    while i < bytes.len() {
-        match bytes[i] {
-            b'"' => if begin.is_some() {
-                if bytes[i-1] != b'\\' {
-                    break
-                }
-            } else {
-                if i + 1 >= bytes.len() {
-                    return Err(Error::new(""));
-                }
-                begin = Some(i + 1);
-            },
-            _ => (),
-        }
-        i += 1;
-    }
-    let begin = if let Some(begin) = begin {
-        begin
-    } else {
-        return Err(Error::new(""));
-    };
-    Ok(String::from_utf8(bytes[begin..i].to_vec()).unwrap())
-}
