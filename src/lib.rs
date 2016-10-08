@@ -91,7 +91,6 @@
 //! that this library is highly experimental at this time.
 
 
-extern crate rustc_serialize;
 extern crate regex;
 #[macro_use] extern crate lazy_static;
 extern crate walkdir;

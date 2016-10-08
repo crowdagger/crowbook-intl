@@ -3,10 +3,9 @@
 // this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use error::{Error,Result};
+use common::find_string;
 
 use std::collections::HashMap;
-
-use rustc_serialize::json;
 
 /// Struct used to store localization information for a language.
 pub struct Lang {
@@ -51,7 +50,7 @@ impl Lang {
             if let Some(begin) = lines[i].find("msgid") {
                 let end = begin + "msgid".len();
                 let s = &lines[i][end..];
-                let key: String = try!(json::decode(s).map_err(|e| {
+                let key: String = try!(find_string(s.as_bytes()).map_err(|e| {
                     Error::parse(format!("initializing lang '{}' at line {}, could not parse {} as a String: {}",
                                          &lang.lang,
                                          i,
@@ -67,7 +66,7 @@ impl Lang {
                 if let Some(begin) = lines[i].find("msgstr") {
                     let end = begin + "msgstr".len();
                     let s = &lines[i][end..];
-                    let value: String = try!(json::decode(s).map_err(|e| {
+                    let value: String = try!(find_string(s.as_bytes()).map_err(|e| {
                         Error::parse(format!("initializing lang '{}' at line {}, could not parse {} as a String: {}",
                                              &lang.lang,
                                              i,
