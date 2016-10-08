@@ -9,6 +9,7 @@ use std::collections::HashMap;
 use std::path::Path;
 use std::fs::File;
 use std::io::Read;
+use std::io::Write;
 
 use regex::Regex;
 use walkdir::WalkDir;
@@ -79,17 +80,30 @@ impl Extractor {
                  .into_owned())
             .filter(|s| s.ends_with(".rs"));
         for filename in filtered {
-            println!("adding messages from {}", &filename);
             try!(self.add_messages_from_file(&filename));
         }
 
         Ok(())
     }
 
-    pub fn print_messages(&self) {
+    /// Generate a pot-like file from the strings extracted from all files (if any)
+    pub fn generate_pot_file(&self) -> String {
+        let mut output = String::from("#, fuzzy\n\n");
         for value in self.messages.values() {
-            println!("{:?}", value);
+            output.push_str(&format!("{}", value));
         }
+        output
+    }
+
+    /// Write a pot-like file to specified location
+    pub fn write_pot_file(self, file: &str) -> Result<()> {
+        let mut f = try!(File::create(file).map_err(|e| Error::new(format!("Could not create file {}: {}",
+                                                                              file, e))));
+        let content = self.generate_pot_file();
+        try!(f.write_all(content.as_bytes())
+             .map_err(|e| Error::new(format!("Could not write to file {}: {}",
+                                             file, e))));
+        Ok(())
     }
 }
 
