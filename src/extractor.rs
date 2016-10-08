@@ -11,6 +11,7 @@ use std::fs::File;
 use std::io::Read;
 
 use regex::Regex;
+use walkdir::WalkDir;
 
 /// Struct that extracts all messages from source code and can print them
 /// to a `.pot` equivalent
@@ -67,9 +68,27 @@ impl Extractor {
         Ok(())
     }
 
+    /// Add messages from all `.rs` files contained in a directory
+    /// (walks through subdirectories)
+    pub fn add_messages_from_dir<P: AsRef<Path>>(&mut self, dir: P) -> Result<()> {
+        let filtered =  WalkDir::new(dir)
+            .into_iter()
+            .filter_map(|e| e.ok())
+            .map(|e| e.path()
+                 .to_string_lossy()
+                 .into_owned())
+            .filter(|s| s.ends_with(".rs"));
+        for filename in filtered {
+            println!("adding messages from {}", &filename);
+            try!(self.add_messages_from_file(&filename));
+        }
+
+        Ok(())
+    }
+
     pub fn print_messages(&self) {
         for value in self.messages.values() {
-            println!("{}", value.msg);
+            println!("{:?}", value);
         }
     }
 }

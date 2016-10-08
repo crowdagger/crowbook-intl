@@ -88,6 +88,7 @@
 extern crate rustc_serialize;
 extern crate regex;
 #[macro_use] extern crate lazy_static;
+extern crate walkdir;
 
 mod macrogen;
 mod lang;
