@@ -11,7 +11,6 @@ use std::fs::File;
 use std::io::Read;
 
 use regex::Regex;
-use rustc_serialize::json;
 
 /// Struct that extracts all messages from source code and can print them
 /// to a `.pot` equivalent
@@ -76,31 +75,25 @@ impl Extractor {
 }
 
 fn find_string(bytes: &[u8]) -> Result<String> {
-    let mut vec = vec!();
-    let mut began = false;
+    let mut begin = None;
     let mut i = 0;
     while i < bytes.len() {
         match bytes[i] {
-            b'"' => if began {
-                break
+            b'"' => if begin.is_some() {
+                if bytes[i-1] != b'\\' {
+                    break
+                }
             } else {
-                began = true;
+                begin = Some(i);
             },
-            b'\\' => {
-                i += 1;
-                if i >= bytes.len() {
-                    return Err(Error::new(""));
-                }
-                match bytes[i] {
-                    b'n' => vec.push(b'\n'),
-                    b't' => vec.push(b'\t'),
-                    b'r' => vec.push(b'\r'),
-                    _ => vec.push(bytes[i]),
-                }
-            },
-            _ => vec.push(bytes[i]),
+            _ => (),
         }
         i += 1;
     }
-    Ok(String::from_utf8(vec).unwrap())
+    let begin = if let Some(begin) = begin {
+        begin
+    } else {
+        return Err(Error::new(""));
+    };
+    Ok(String::from_utf8(bytes[begin..i].to_vec()).unwrap())
 }
