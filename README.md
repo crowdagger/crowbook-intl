@@ -88,13 +88,6 @@ println!("{}", lformat!("Hello, world!")); // prints "Bonjour le monde !"
 In case the complexity of the operation didn't discourage you, I should warn you
 that this library is highly experimental at this time.
 
-
-A library to localize strings, translating them according to runtime options.
-
-Basically, this library allows your project to generate a `lformat!` macro, that behaves
-similarly to `format!`, except the message string (the first argument) might get translated
-(if you can find the appropriate string for the language).
-
 ## Documentation ##
 
 See the
