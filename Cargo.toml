@@ -12,3 +12,5 @@ publish = true
 
 [dependencies]
 rustc-serialize = "0.3"
+lazy_static = "0.2"
+regex = "0.1"

@@ -86,11 +86,16 @@
 
 
 extern crate rustc_serialize;
+extern crate regex;
+#[macro_use] extern crate lazy_static;
 
 mod macrogen;
 mod lang;
 mod error;
 mod localizer;
+mod message;
+mod extractor;
 
 pub use error::{Result, Error};
 pub use localizer::Localizer;
+pub use extractor::Extractor;
