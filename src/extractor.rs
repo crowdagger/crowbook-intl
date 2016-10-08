@@ -15,7 +15,24 @@ use regex::Regex;
 use walkdir::WalkDir;
 
 /// Struct that extracts all messages from source code and can print them
-/// to a `.pot` equivalent
+/// to a `.pot` file.
+///
+/// This file can then be used as a starting point to begin translation.
+/// It should be relatively similar to `gettext` generated files.
+///
+/// # Example
+///
+/// ```
+/// use crowbook_localize::Extractor;
+/// let mut extractor = Extractor::new();
+/// extractor.add_messages_from_dir("src/").unwrap();
+/// println!("{}", extractor.generate_pot_file());
+/// ```
+///
+/// # Note
+///
+/// This struct only add messages that are considered as needing localization,
+/// that is, the first argument of calls so `lformat!` macro.
 pub struct Extractor {
     messages: HashMap<String, Message>,
 }
