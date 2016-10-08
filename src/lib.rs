@@ -16,7 +16,7 @@
 //! build = "build.rs"
 //! 
 //! [build-dependencies]
-//! crowbook-localize = "0.0.2"
+//! crowbook-localize = "0.0.3"
 //!
 //! [dependencies]
 //! lazy_static = "0.2" # the generated file needs `lazy_static!`
@@ -26,12 +26,17 @@
 //!
 //! ```rust,ignore
 //! extern crate crowbook_localize;
-//! use crowbook_localize::Localizer;
+//! use crowbook_localize::{Localizer, Extractor};
 //! 
 //! fn main() {
+//!     // Generate the `localize_macros.rs` file
 //!     let mut localizer = Localizer::new();
-//!     
 //!     localizer.write_macro_file(concat!(env!("CARGO_MANIFEST_DIR"), "/src/lib/localize_macros.rs")).unwrap();
+//!
+//!     // Generate a `lang/default.pot` containing strings used to call `lformat!`
+//!     let mut extractor = Extractor::new();
+//!     extractor.add_messages_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/src")).unwrap();
+//!     extractor.write_pot_file(concat!(env!("CARGO_MANIFEST_DIR"), "/lang/default.pot")).unwrap();
 //! }
 //! ```
 //!
@@ -53,7 +58,8 @@
 //! ```rust,ignore
 //! println!("{}", lformat!("Hello, world!"));
 //! ```
-//! and you want it translated in french, you'll have to create a `lang/fr.mo` file containing:
+//! and you want it translated in french, you'll have to create a `lang/fr.mo` file
+//! from the `lang/default.pot` file containing:
 //!
 //! ```text
 //! msgid "Hello, world!";
