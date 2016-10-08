@@ -12,7 +12,7 @@
 //!
 //! First, you'll need to add the following to your `Cargo.toml` file:
 //!
-//! ```toml, no_run
+//! ```toml
 //! build = "build.rs"
 //! 
 //! [build-dependencies]
@@ -24,7 +24,7 @@
 //!
 //! You'll then need to create the `build.rs` file, which can look like this:
 //!
-//! ```rust, no_run
+//! ```rust,ignore
 //! extern crate crowbook_localize;
 //! use crowbook_localize::Localizer;
 //! 
@@ -38,7 +38,7 @@
 //! This way, a `localize_macros.rs` file will be created at build time in `src/lib`.
 //! To use it, the last step is to modify your `src/lib/lib.rs` file:
 //!
-//! ```rust, no_run
+//! ```rust,ignore
 //! #[macro_use] extern crate lazy_static;
 //! #[macro_use] mod localize_macros;
 //! ```
@@ -50,19 +50,19 @@
 //!
 //! E.g., if you have the following code:
 //!
-//! ```rust, no_run
+//! ```rust,ignore
 //! println!("{}", lformat!("Hello, world!"));
 //! ```
 //! and you want it translated in french, you'll have to create a `lang/fr.mo` file containing:
 //!
-//! ```text, no_run
+//! ```text
 //! msgid "Hello, world!";
 //! msgstr "Bonjour le monde !";
 //! ```
 //!
 //! And load it in your `build.rs` file:
 //!
-//! ```rust, no_run
+//! ```rust,ignore
 //! let mut localizer = Localizer::new();
 //! localizer.add_lang("fr", include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/lang/fr.mo"))).unwrap();
 //! localizer.write_macro_file("...");
@@ -71,7 +71,7 @@
 //! Once *this* is done, you can use the `localize_macros::set_lang` function
 //! to switch the language at runtime:
 //!
-//! ```rust, no_run
+//! ```rust,ignore
 //! use localize_macros::set_lang;
 //! set_lang("en");
 //! println!("{}", lformat!("Hello, world!")); // prints "Hello, world!"
