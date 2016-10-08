@@ -69,7 +69,7 @@ impl Extractor {
 
     pub fn print_messages(&self) {
         for value in self.messages.values() {
-            println!("{:?}", value);
+            println!("{}", value.msg);
         }
     }
 }
@@ -84,7 +84,10 @@ fn find_string(bytes: &[u8]) -> Result<String> {
                     break
                 }
             } else {
-                begin = Some(i);
+                if i + 1 >= bytes.len() {
+                    return Err(Error::new(""));
+                }
+                begin = Some(i + 1);
             },
             _ => (),
         }

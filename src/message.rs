@@ -4,7 +4,7 @@
 
 /// Represents a comment concerning the location/translation of a message
 #[derive(Debug)]
-enum Comment {
+pub enum Comment {
     /// File and line
     Source(String, usize)
 }
@@ -14,8 +14,8 @@ enum Comment {
 /// corresponding to position in source file
 #[derive(Debug)]
 pub struct Message {
-    msg: String,
-    comments: Vec<Comment> 
+    pub msg: String,
+    pub comments: Vec<Comment> 
 }
 
 
