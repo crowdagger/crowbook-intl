@@ -74,7 +74,9 @@ impl Lang {
                                              s,
                                              e))
                     }));
-                    lang.insert(key, value);
+                    if !value.is_empty() {
+                        lang.insert(key, value);
+                    }
                 } else {
                     unreachable!()
                 }
