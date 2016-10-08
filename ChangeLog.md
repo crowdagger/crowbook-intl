@@ -1,6 +1,6 @@
 # ChangeLog #
 
-## 0.0.3 (unreleased) ##
+## 0.0.3 (2016-10-08) ##
 * Added the `Extractor` struct, that generates a pot-like file looking
   at `lformat!` invocations in your source code.
 
