@@ -1,6 +1,9 @@
 # ChangeLog #
 
 ## unreleased ##
+`crowbook-localize` should now be able to generate `.pot` files that
+are compatible with `msgmerge` and be able to read `.po` files that
+have been updated with `msgmerge`.
 * Fix printing and reading of strings which caused problems with
   escape characters.
 * Add support for multiline strings ala gettext in translation files.
