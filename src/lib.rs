@@ -16,7 +16,7 @@
 //! build = "build.rs"
 //! 
 //! [build-dependencies]
-//! crowbook-localize = "0.0.3"
+//! crowbook-localize = "0.0.4"
 //!
 //! [dependencies]
 //! lazy_static = "0.2" # the generated file needs `lazy_static!`
@@ -58,7 +58,7 @@
 //! ```rust,ignore
 //! println!("{}", lformat!("Hello, world!"));
 //! ```
-//! and you want it translated in french, you'll have to create a `lang/fr.mo` file
+//! and you want it translated in french, you'll have to create a `lang/fr.po` file
 //! from the `lang/default.pot` file containing:
 //!
 //! ```text
@@ -70,7 +70,7 @@
 //!
 //! ```rust,ignore
 //! let mut localizer = Localizer::new();
-//! localizer.add_lang("fr", include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/lang/fr.mo"))).unwrap();
+//! localizer.add_lang("fr", include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/lang/fr.mp"))).unwrap();
 //! localizer.write_macro_file("...");
 //! ```
 //!
@@ -84,6 +84,14 @@
 //! set_lang("fr");
 //! println!("{}", lformat!("Hello, world!")); // prints "Bonjour le monde !"
 //! ```
+//!
+//! # Updating your translation
+//!
+//! When you add new strings that need to be translated (by more calls to `lformat!`),
+//! or when you change the content of existing strings, you can use [Gettext's `msgmerge`](https://www.gnu.org/software/gettext/manual/html_node/msgmerge-Invocation.html)
+//! command to update your translation. While it is not guaranteed that the formats are
+//! strictly identicals, it should work. (That is, it is a bug if it doesn't; but at this
+//! stage, this library is absolutely not guaranteed to be bug-free.)
 //!
 //! # Warning
 //!
