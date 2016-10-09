@@ -1,6 +1,6 @@
 # ChangeLog #
 
-## unreleased ##
+## 0.0.4 (2016-10-09) ##
 `crowbook-localize` should now be able to generate `.pot` files that
 are compatible with `msgmerge` and be able to read `.po` files that
 have been updated with `msgmerge`.
