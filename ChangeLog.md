@@ -1,6 +1,6 @@
 # ChangeLog #
 
-## unreleased ##
+## 0.0.5 (2016-10-10) ##
 * newlines characters are escaped when generating pot file so
   `msgmerge` doesn't complain
 

@@ -14,7 +14,7 @@ First, you'll need to add the following to your `Cargo.toml` file:
 build = "build.rs"
 
 [build-dependencies]
-crowbook-localize = "0.0.4"
+crowbook-localize = "0.0.5"
 
 [dependencies]
 lazy_static = "0.2" # the generated file needs `lazy_static!`
