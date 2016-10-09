@@ -32,3 +32,22 @@ pub fn find_string(bytes: &[u8]) -> Result<String> {
     };
     Ok(String::from_utf8(bytes[begin..i].to_vec()).unwrap())
 }
+
+
+#[test]
+fn find_string_1() {
+    let s = r#"
+"Test"
+"#;
+    let expected = "Test";
+    assert_eq!(&find_string(s.as_bytes()).unwrap(), expected);
+}
+
+#[test]
+fn find_string_2() {
+    let s = r#"
+"A \"test\"..."
+"#;
+    let expected = r#"A \"test\"..."#;
+    assert_eq!(&find_string(s.as_bytes()).unwrap(), expected);
+}
