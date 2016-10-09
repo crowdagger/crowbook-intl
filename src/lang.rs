@@ -49,18 +49,23 @@ impl Lang {
             }
             if let Some(begin) = lines[i].find("msgid") {
                 let end = begin + "msgid".len();
-                let s = &lines[i][end..];
-                let key: String = try!(find_string(s.as_bytes()).map_err(|e| {
-                    Error::parse(format!("initializing lang '{}' at line {}, could not parse {} as a String: {}",
-                                         &lang.lang,
-                                         i,
-                                         s,
-                                         e))
-                }));
-                if i >= lines.len() - 1 || ! lines[i+1].starts_with("msgstr") {
-                    return Err(Error::parse(format!("initializing lang '{}' at line {}, found 'msgid' without matching 'msgstr on next line",
-                                                &lang.lang,
-                                                i)));
+                let mut s = &lines[i][end..];
+                let mut key = String::new();
+                loop {
+                    key.push_str(&try!(find_string(s.as_bytes()).map_err(|e| {
+                        Error::parse(format!("initializing lang '{}' at line {}, could not parse {} as a String: {}",
+                                             &lang.lang, i, s, e))
+                    })));
+                    if i >= lines.len() - 1 || lines[i+1].starts_with("msgstr") {
+                            break;
+                    } else if lines[i+1].starts_with('"') {
+                        i = i + 1;
+                        s = lines[i];
+                    } else {
+                        return Err(Error::parse(format!("initializing lang '{}' at line {}, found 'msgid' without matching 'msgstr on next line",
+                                                        &lang.lang,
+                                                        i)));
+                    }
                 }
                 i += 1;
                 if let Some(begin) = lines[i].find("msgstr") {
@@ -156,7 +161,7 @@ msgstr "Autre chaîne"
 }
 
 #[test]
-fn lang_multiline() {
+fn lang_multiline_1() {
     let s = r#"
 msgid "foo"
 msgstr ""
@@ -165,6 +170,19 @@ msgstr ""
 "#;
     let lang = Lang::new_from_str("fr", s).unwrap();
     assert_eq!(lang.content.get("foo").unwrap(), "foobar");
+}
+
+#[test]
+fn lang_multiline_2() {
+    let s = r#"
+msgid "foo"
+"bar"
+msgstr ""
+"foo"
+"bar"
+"#;
+    let lang = Lang::new_from_str("fr", s).unwrap();
+    assert_eq!(lang.content.get("foobar").unwrap(), "foobar");
 }
 
 #[test]
