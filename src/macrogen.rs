@@ -16,11 +16,11 @@ pub fn generate_lformat(langs: &mut [Lang]) -> String {
             let b = has_arguments(key);
             let mut inner = String::new();
             if b {
-                inner.push_str(&format!("            \"{}\" => format!({:?}, $($arg)*),\n",
+                inner.push_str(&format!("            \"{}\" => format!(\"{}\", $($arg)*),\n",
                                        curr[i].lang,
                                        value));
             } else {
-                inner.push_str(&format!("            \"{}\" => format!({:?}),\n",
+                inner.push_str(&format!("            \"{}\" => format!(\"{})\",\n",
                                        curr[i].lang,
                                        value));
             }
@@ -29,11 +29,11 @@ pub fn generate_lformat(langs: &mut [Lang]) -> String {
                 let ref mut hash = other_lang.content;
                 if let Some(value) = hash.remove(key) {
                     if b {
-                        inner.push_str(&format!("            \"{}\" => format!({:?}, $($arg)*),\n",
+                        inner.push_str(&format!("            \"{}\" => format!(\"{}\", $($arg)*),\n",
                                                 other_lang.lang,
                                                 value));
                     } else {
-                        inner.push_str(&format!("            \"{}\" => format!({:?}),\n",
+                        inner.push_str(&format!("            \"{}\" => format!(\"{}\"),\n",
                                                         other_lang.lang,
                                                         value));
                     }
@@ -42,10 +42,10 @@ pub fn generate_lformat(langs: &mut [Lang]) -> String {
 
             
             if b {
-                inner.push_str(&format!("            _ => format!({:?}, $($arg)*),\n",
+                inner.push_str(&format!("            _ => format!(\"{}\", $($arg)*),\n",
                                         key));
             } else {
-                inner.push_str(&format!("            _ => format!({:?}),\n",
+                inner.push_str(&format!("            _ => format!(\"{}\"),\n",
                                         key));
             }
             
@@ -55,12 +55,12 @@ pub fn generate_lformat(langs: &mut [Lang]) -> String {
             inner);
 
             if b {
-                arg_variant.push_str(&format!("    ({:?}, $($arg:tt)*) => ({{
+                arg_variant.push_str(&format!("    (\"{}\", $($arg:tt)*) => ({{
 {}
     }});\n",
                 key, this_variant));
             } else {
-                noarg_variant.push_str(&format!("    ({:?}) => ({{
+                noarg_variant.push_str(&format!("    (\"{}\") => ({{
 {}
     }});\n",
                 key, this_variant));

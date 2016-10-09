@@ -47,7 +47,7 @@ impl fmt::Display for Message {
             }
         }
         writeln!(f, "
-msgid {:?}
+msgid \"{}\"
 msgstr \"\"\n",
                  self.msg)
     }
