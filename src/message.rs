@@ -3,6 +3,7 @@
 // this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use std::fmt;
+use common::escape_string;
 
 /// Represents a comment concerning the location/translation of a message
 #[derive(Debug)]
@@ -49,6 +50,6 @@ impl fmt::Display for Message {
         writeln!(f, "
 msgid \"{}\"
 msgstr \"\"\n",
-                 self.msg)
+                 escape_string(&self.msg))
     }
 }

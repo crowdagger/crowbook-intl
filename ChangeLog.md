@@ -1,5 +1,9 @@
 # ChangeLog #
 
+## unreleased ##
+* newlines characters are escaped when generating pot file so
+  `msgmerge` doesn't complain
+
 ## 0.0.4 (2016-10-09) ##
 `crowbook-localize` should now be able to generate `.pot` files that
 are compatible with `msgmerge` and be able to read `.po` files that
