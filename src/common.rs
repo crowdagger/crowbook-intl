@@ -9,7 +9,7 @@ use std::borrow::Cow;
 /// Escape some special characters that would cause trouble
 pub fn escape_string<'a>(s: &'a str) -> Cow<'a, str> {
     if s.contains('\n') {
-        let res = s.replace('\n', "\n");
+        let res = s.replace('\n', r"\n");
         Cow::Owned(res)
     } else {
         Cow::Borrowed(s)
@@ -68,6 +68,6 @@ fn find_string_2() {
 fn escape_string_1() {
     let s = r#"foo
 bar"#;
-    let expected = "foo\nbar";
+    let expected = "foo\\nbar";
     assert_eq!(&escape_string(s), expected);
 }
