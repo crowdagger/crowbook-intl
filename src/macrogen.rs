@@ -20,7 +20,7 @@ pub fn generate_lformat(langs: &mut [Lang]) -> String {
                                        curr[i].lang,
                                        value));
             } else {
-                inner.push_str(&format!("            \"{}\" => format!(\"{})\",\n",
+                inner.push_str(&format!("            \"{}\" => format!(\"{}\"),\n",
                                        curr[i].lang,
                                        value));
             }

@@ -106,7 +106,7 @@ impl Extractor {
 
     /// Generate a pot-like file from the strings extracted from all files (if any)
     pub fn generate_pot_file(&self) -> String {
-        let mut output = String::from("#, fuzzy\n\n");
+        let mut output = String::from(POT_HEADER);
         for value in self.messages.values() {
             output.push_str(&format!("{}", value));
         }
@@ -125,3 +125,14 @@ impl Extractor {
     }
 }
 
+const POT_HEADER: &'static str = r#"# SOME DESCRIPTIVE TITLE
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# LICENSE
+# AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+"#;

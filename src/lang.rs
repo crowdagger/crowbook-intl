@@ -65,15 +65,24 @@ impl Lang {
                 i += 1;
                 if let Some(begin) = lines[i].find("msgstr") {
                     let end = begin + "msgstr".len();
-                    let s = &lines[i][end..];
-                    let value: String = try!(find_string(s.as_bytes()).map_err(|e| {
+                    let mut s = &lines[i][end..];
+                    let mut value = String::new();
+                    loop {
+                        value.push_str(&try!(find_string(s.as_bytes()).map_err(|e| {
                         Error::parse(format!("initializing lang '{}' at line {}, could not parse {} as a String: {}",
                                              &lang.lang,
                                              i,
                                              s,
                                              e))
-                    }));
-                    if !value.is_empty() {
+                        })));
+                        if i >= lines.len() - 1 || lines[i+1].is_empty() {
+                            break;
+                        } else {
+                            i = i + 1;
+                            s = lines[i];
+                        }
+                    }
+                    if !key.is_empty() && !value.is_empty() {
                         lang.insert(key, value);
                     }
                 } else {
@@ -144,4 +153,29 @@ msgstr "Autre chaîne"
 "#;
     let lang = Lang::new_from_str("fr", s);
     assert!(lang.is_err());
+}
+
+#[test]
+fn lang_multiline() {
+    let s = r#"
+msgid "foo"
+msgstr ""
+"foo"
+"bar"
+"#;
+    let lang = Lang::new_from_str("fr", s).unwrap();
+    assert_eq!(lang.content.get("foo").unwrap(), "foobar");
+}
+
+#[test]
+fn lang_empty() {
+    let s = r#"
+msgid "foo"
+msgstr ""
+
+msgid ""
+msgstr "bar"
+"#;
+    let lang = Lang::new_from_str("fr", s).unwrap();
+    assert_eq!(lang.content.len(), 0);
 }
