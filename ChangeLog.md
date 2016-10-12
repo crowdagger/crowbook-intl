@@ -1,7 +1,12 @@
 # ChangeLog #
 
+## unreleased ##
+* '\' followed by a newline is now escaped (well, suppressed along
+  leading whitespace on next line) when generating pot file. 
+* Now uses Travis for continuous integration.
+	
 ## 0.0.5 (2016-10-10) ##
-* newlines characters are escaped when generating pot file so
+* Newlines characters are escaped when generating pot file so
   `msgmerge` doesn't complain
 
 ## 0.0.4 (2016-10-09) ##
