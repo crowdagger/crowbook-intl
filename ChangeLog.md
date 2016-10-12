@@ -1,5 +1,9 @@
 # ChangeLog #
 
+## 0.0.7 (2016-10-13 ##
+* `Extractor` now uses `escape_string` for its keys, allowing to use
+  `lformat!` with multiline strings using the `\` escape at end of line.  
+
 ## 0.0.6 (2016-10-13) ##
 * '\' followed by a newline is now escaped (well, suppressed along
   leading whitespace on next line) when generating pot file. 
