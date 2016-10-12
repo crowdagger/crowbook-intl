@@ -1,6 +1,6 @@
 # ChangeLog #
 
-## unreleased ##
+## 0.0.6 (2016-10-13) ##
 * '\' followed by a newline is now escaped (well, suppressed along
   leading whitespace on next line) when generating pot file. 
 * Now uses Travis for continuous integration.

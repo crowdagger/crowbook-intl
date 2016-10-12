@@ -16,7 +16,7 @@
 //! build = "build.rs"
 //! 
 //! [build-dependencies]
-//! crowbook-localize = "0.0.5"
+//! crowbook-localize = "0.0.6"
 //!
 //! [dependencies]
 //! lazy_static = "0.2" # the generated file needs `lazy_static!`
