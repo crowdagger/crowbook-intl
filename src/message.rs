@@ -50,6 +50,6 @@ impl fmt::Display for Message {
         writeln!(f, "
 msgid \"{}\"
 msgstr \"\"\n",
-                 escape_string(&self.msg))
+                 escape_string(self.msg.as_str()))
     }
 }

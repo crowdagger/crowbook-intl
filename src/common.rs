@@ -12,17 +12,18 @@ use regex::Regex;
 ///
 /// The newline character
 /// '\' followed by a newline
-pub fn escape_string<'a>(s: &'a str) -> Cow<'a, str> {
+pub fn escape_string<'a, S:Into<Cow<'a, str>>>(s: S) -> Cow<'a, str> {
     lazy_static! {
         static ref REGEX:Regex = Regex::new(r#"\\\n\s*"#).unwrap();
     }
-    
-    if s.contains('\n') || REGEX.is_match(s) {
-        let mut res = REGEX.replace_all(s, "");
+
+    let s = s.into();
+    if s.contains('\n') || REGEX.is_match(&s) {
+        let mut res = REGEX.replace_all(&s, "");
         res = res.replace('\n', r"\n");
         Cow::Owned(res)
     } else {
-        Cow::Borrowed(s)
+        s
     }
 }
 

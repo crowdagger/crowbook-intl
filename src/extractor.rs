@@ -4,7 +4,7 @@
 
 use message::Message;
 use error::{Error, Result};
-use common::find_string;
+use common::{find_string, escape_string};
 
 use std::collections::HashMap;
 use std::path::Path;
@@ -70,12 +70,14 @@ impl Extractor {
             let line = 1 + &content[..pos].bytes().filter(|b| b == &b'\n').count();
             
             let bytes = content[pos..].as_bytes();
-            let msg = try!(find_string(bytes)
-                           .map_err(|_| Error::parse(format!("{}:{}: could not parse as string",
-                                                            &filename,
-                                                            line))));
+            let msg: String = escape_string(
+                try!(find_string(bytes)
+                      .map_err(|_| Error::parse(format!("{}:{}: could not parse as string",
+                                                        &filename,
+                                                        line)))))
+                .into_owned();
             
-            if self.messages.contains_key(&msg) {
+            if self.messages.contains_key(msg.as_str()) {
                 self.messages.get_mut(&msg).unwrap().add_source(filename.as_str(), line);
             } else {
                 let mut message = Message::new(msg.as_str());
