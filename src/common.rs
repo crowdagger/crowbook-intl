@@ -6,10 +6,20 @@ use error::{Error, Result};
 
 use std::borrow::Cow;
 
+use regex::Regex;
+
 /// Escape some special characters that would cause trouble
+///
+/// The newline character
+/// '\' followed by a newline
 pub fn escape_string<'a>(s: &'a str) -> Cow<'a, str> {
-    if s.contains('\n') {
-        let res = s.replace('\n', r"\n");
+    lazy_static! {
+        static ref REGEX:Regex = Regex::new(r#"\\\n\s*"#).unwrap();
+    }
+    
+    if s.contains('\n') || REGEX.is_match(s) {
+        let mut res = REGEX.replace_all(s, "");
+        res = res.replace('\n', r"\n");
         Cow::Owned(res)
     } else {
         Cow::Borrowed(s)
@@ -69,5 +79,31 @@ fn escape_string_1() {
     let s = r#"foo
 bar"#;
     let expected = "foo\\nbar";
+    assert_eq!(&escape_string(s), expected);
+}
+
+#[test]
+fn escape_string_2() {
+    let s = "foo\
+             bar";
+    let expected = "foobar";
+    assert_eq!(&escape_string(s), expected);
+}
+
+#[test]
+fn escape_string_3() {
+    let s = r#"foo\
+             bar"#;
+    let expected = "foobar";
+    assert_eq!(&escape_string(s), expected);
+}
+
+
+#[test]
+fn escape_string_4() {
+    let s = r#"foo\
+             bar
+baz"#;
+    let expected = "foobar\\nbaz";
     assert_eq!(&escape_string(s), expected);
 }
