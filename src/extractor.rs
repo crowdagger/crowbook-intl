@@ -36,6 +36,7 @@ use walkdir::WalkDir;
 /// that is, the first argument of calls so `lformat!` macro.
 pub struct Extractor {
     messages: HashMap<String, Message>,
+    format_match: HashMap<String, String>, //TODO: actually should be a list???
 }
 
 impl Extractor {
@@ -43,6 +44,16 @@ impl Extractor {
     pub fn new() -> Extractor {
         Extractor {
             messages: HashMap::new(),
+            format_match: HashMap::new(), 
+        }
+    }
+
+    /// Get the orig msg, as the exact string written in `lformat!`
+    pub fn get_orig<'a>(&'a self, msg: &'a str) -> &'a str {
+        if let Some(ref orig) = self.format_match.get(msg) {
+            orig.as_str()
+        } else {
+            msg
         }
     }
 
@@ -70,16 +81,18 @@ impl Extractor {
             let line = 1 + &content[..pos].bytes().filter(|b| b == &b'\n').count();
             
             let bytes = content[pos..].as_bytes();
-            let msg: String = escape_string(
-                try!(find_string(bytes)
-                      .map_err(|_| Error::parse(format!("{}:{}: could not parse as string",
-                                                        &filename,
-                                                        line)))))
-                .into_owned();
+            let orig_msg: String = try!(find_string(bytes)
+                                   .map_err(|_| Error::parse(format!("{}:{}: could not parse as string",
+                                                                     &filename,
+                                                                     line))));
+            let msg = escape_string(orig_msg.as_str()).into_owned();
             
             if self.messages.contains_key(msg.as_str()) {
                 self.messages.get_mut(&msg).unwrap().add_source(filename.as_str(), line);
             } else {
+                if msg != orig_msg {
+                    self.format_match.insert(msg.clone(), orig_msg);
+                }
                 let mut message = Message::new(msg.as_str());
                 message.add_source(filename.as_str(), line);
                 self.messages.insert(msg, message);
@@ -116,7 +129,7 @@ impl Extractor {
     }
 
     /// Write a pot-like file to specified location
-    pub fn write_pot_file(self, file: &str) -> Result<()> {
+    pub fn write_pot_file(&mut self, file: &str) -> Result<()> {
         let mut f = try!(File::create(file).map_err(|e| Error::new(format!("Could not create file {}: {}",
                                                                               file, e))));
         let content = self.generate_pot_file();

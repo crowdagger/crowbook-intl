@@ -3,9 +3,10 @@
 // this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use lang::Lang;
+use extractor::Extractor;
 
 /// Generate the `lformat!` macro
-pub fn generate_lformat(langs: &mut [Lang]) -> String {
+pub fn generate_lformat(langs: &mut [Lang], extractor: &Extractor) -> String {
     let mut arg_variant = String::new();
     let mut noarg_variant = String::new();
 
@@ -58,12 +59,12 @@ pub fn generate_lformat(langs: &mut [Lang]) -> String {
                 arg_variant.push_str(&format!("    (\"{}\", $($arg:tt)*) => ({{
 {}
     }});\n",
-                key, this_variant));
+                extractor.get_orig(key), this_variant));
             } else {
                 noarg_variant.push_str(&format!("    (\"{}\") => ({{
 {}
     }});\n",
-                key, this_variant));
+                extractor.get_orig(key), this_variant));
             }
         }
     }
@@ -80,9 +81,9 @@ pub fn generate_lformat(langs: &mut [Lang]) -> String {
 
 
 /// Generate the file containing the localization macros
-pub fn generate_macro_file(langs: &mut [Lang]) -> String {
+pub fn generate_macro_file(langs: &mut [Lang], extractor: &Extractor) -> String {
     let mut output = String::from(include_str!("../data/localize_macros.rs"));
-    output.push_str(&generate_lformat(langs));
+    output.push_str(&generate_lformat(langs, extractor));
     output
 }
 

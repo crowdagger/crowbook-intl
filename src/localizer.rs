@@ -5,6 +5,7 @@
 use lang::Lang;
 use error::{Result, Error};
 use macrogen;
+use extractor::Extractor;
 
 use std::fs::File;
 use std::io::Write;
@@ -28,14 +29,18 @@ use std::io::Write;
 /// localizer.add_lang("es", es).unwrap();
 /// println!("{}", localizer.generate_macro_file());
 /// ```
-pub struct Localizer {
+pub struct Localizer<'a> {
     langs: Vec<Lang>,
+    extractor: &'a Extractor,
 }
 
-impl Localizer {
+impl<'a> Localizer<'a> {
     /// Create a new, empty Localizer
-    pub fn new() -> Localizer {
-        Localizer { langs: vec!() }
+    pub fn new(extractor: &'a Extractor) -> Localizer<'a> {
+        Localizer {
+            langs: vec!(),
+            extractor: extractor,
+        }
     }
 
     /// Add a lang to the localizer
@@ -53,7 +58,7 @@ impl Localizer {
 
     /// Generate the `localization_macros.rs` file.
     pub fn generate_macro_file(mut self) -> String {
-        macrogen::generate_macro_file(&mut self.langs)
+        macrogen::generate_macro_file(&mut self.langs, self.extractor)
     }
 
     /// Write the `localization_macros.rs` file to a file.
