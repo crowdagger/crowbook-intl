@@ -29,14 +29,14 @@
 //! use crowbook_localize::{Localizer, Extractor};
 //! 
 //! fn main() {
-//!     // Generate the `localize_macros.rs` file
-//!     let mut localizer = Localizer::new();
-//!     localizer.write_macro_file(concat!(env!("CARGO_MANIFEST_DIR"), "/src/lib/localize_macros.rs")).unwrap();
-//!
 //!     // Generate a `lang/default.pot` containing strings used to call `lformat!`
 //!     let mut extractor = Extractor::new();
 //!     extractor.add_messages_from_dir(concat!(env!("CARGO_MANIFEST_DIR"), "/src")).unwrap();
 //!     extractor.write_pot_file(concat!(env!("CARGO_MANIFEST_DIR"), "/lang/default.pot")).unwrap();
+//!
+//!     // Generate the `localize_macros.rs` file
+//!     let mut localizer = Localizer::new(&extractor);
+//!     localizer.write_macro_file(concat!(env!("CARGO_MANIFEST_DIR"), "/src/lib/localize_macros.rs")).unwrap();
 //! }
 //! ```
 //!
