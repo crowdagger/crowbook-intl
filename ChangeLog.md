@@ -5,6 +5,8 @@
   possible to use the same translation for two strings that are
   identical but don't use backslash the same way, the API had to be
   modified a bit. It should now work correctly-ish.
+* Messages are now sorted (by file of apparition) before being written
+  to `.pot` file.
 
 ## 0.0.7 (2016-10-13 ##
 * `Extractor` now uses `escape_string` for its keys, allowing to use
