@@ -15,7 +15,7 @@ use std::io::Write;
 /// # Example
 ///
 /// ```rust
-/// use crowbook_localize::Localizer;
+/// use crowbook_localize::{Localizer, Extractor};
 /// let fr = r#"
 /// msgid "Hello, {}"
 /// msgstr "Bonjour, {}"
@@ -24,7 +24,8 @@ use std::io::Write;
 /// msgid "Hello, {}"
 /// msgstr "Hola, {}"
 /// "#;
-/// let mut localizer = Localizer::new();
+/// let extractor = Extractor::new();
+/// let mut localizer = Localizer::new(&extractor);
 /// localizer.add_lang("fr", fr).unwrap();
 /// localizer.add_lang("es", es).unwrap();
 /// println!("{}", localizer.generate_macro_file());
