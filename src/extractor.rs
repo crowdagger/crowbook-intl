@@ -36,7 +36,9 @@ use walkdir::WalkDir;
 /// that is, the first argument of calls so `lformat!` macro.
 pub struct Extractor {
     messages: HashMap<String, Message>,
-    format_match: HashMap<String, String>, //TODO: actually should be a list???
+    // Matches the format string (as used by `lformat!` and the actual escaped string
+    // given to potfile
+    pub format_match: HashMap<String, String>, 
 }
 
 impl Extractor {
@@ -48,10 +50,10 @@ impl Extractor {
         }
     }
 
-    /// Get the orig msg, as the exact string written in `lformat!`
-    pub fn get_orig<'a>(&'a self, msg: &'a str) -> &'a str {
-        if let Some(ref orig) = self.format_match.get(msg) {
-            orig.as_str()
+    /// Get the escape string
+    pub fn get_escaped<'a>(&'a self, msg: &'a str) -> &'a str {
+        if let Some(ref escaped) = self.format_match.get(msg) {
+            escaped.as_str()
         } else {
             msg
         }
@@ -86,13 +88,13 @@ impl Extractor {
                                                                      &filename,
                                                                      line))));
             let msg = escape_string(orig_msg.as_str()).into_owned();
+            if msg != orig_msg {
+                self.format_match.insert(orig_msg, msg.clone());
+            }
             
             if self.messages.contains_key(msg.as_str()) {
                 self.messages.get_mut(&msg).unwrap().add_source(filename.as_str(), line);
             } else {
-                if msg != orig_msg {
-                    self.format_match.insert(msg.clone(), orig_msg);
-                }
                 let mut message = Message::new(msg.as_str());
                 message.add_source(filename.as_str(), line);
                 self.messages.insert(msg, message);

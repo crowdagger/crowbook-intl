@@ -13,6 +13,8 @@ pub fn generate_lformat(langs: &mut [Lang], extractor: &Extractor) -> String {
     for i in 0..langs.len() {
         let (curr, rest) = langs.split_at_mut(i + 1);
         let ref mut hash = curr[i].content;
+
+        // Write keys and translations from the po files
         for (key, value) in hash {
             let b = has_arguments(key);
             let mut inner = String::new();
@@ -59,12 +61,24 @@ pub fn generate_lformat(langs: &mut [Lang], extractor: &Extractor) -> String {
                 arg_variant.push_str(&format!("    (\"{}\", $($arg:tt)*) => ({{
 {}
     }});\n",
-                extractor.get_orig(key), this_variant));
+                                              key, this_variant));
             } else {
                 noarg_variant.push_str(&format!("    (\"{}\") => ({{
 {}
     }});\n",
-                extractor.get_orig(key), this_variant));
+                                                key, this_variant));
+            }
+        }
+
+        // Add translations from exact msg formats used in lformat! to the ones
+        // Used in .po files (e.g. might not have the same escape codes)
+        for (key, value) in &extractor.format_match {
+            if has_arguments(key) {
+                arg_variant.push_str(&format!("    (\"{}\", $($arg:tt)*) => (lformat!(\"{}\", $($arg)*));\n",
+                                              key, value));
+            } else {
+                noarg_variant.push_str(&format!("    (\"{}\") => (lformat!(\"{}\"));\n",
+                                              key, value));
             }
         }
     }
