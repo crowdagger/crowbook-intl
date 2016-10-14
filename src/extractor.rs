@@ -38,7 +38,7 @@ pub struct Extractor {
     messages: HashMap<String, Message>,
     // Matches the format string (as used by `lformat!` and the actual escaped string
     // given to potfile
-    pub format_match: HashMap<String, String>, 
+    orig_strings: HashMap<String, String>, 
 }
 
 impl Extractor {
@@ -46,17 +46,15 @@ impl Extractor {
     pub fn new() -> Extractor {
         Extractor {
             messages: HashMap::new(),
-            format_match: HashMap::new(), 
+            orig_strings: HashMap::new(), 
         }
     }
 
-    /// Get the escape string
-    pub fn get_escaped<'a>(&'a self, msg: &'a str) -> &'a str {
-        if let Some(ref escaped) = self.format_match.get(msg) {
-            escaped.as_str()
-        } else {
-            msg
-        }
+    /// Returns a hashmap mapping the original strings (as used by `lformat!`)
+    /// to escaped strings. Only contains strings that are different and
+    /// must thus be handled.
+    pub fn original_strings<'a>(&'a self) -> &'a HashMap<String, String> {
+        &self.orig_strings
     }
 
     /// Add all the messages contained in a source file
@@ -89,7 +87,7 @@ impl Extractor {
                                                                      line))));
             let msg = escape_string(orig_msg.as_str()).into_owned();
             if msg != orig_msg {
-                self.format_match.insert(orig_msg, msg.clone());
+                self.orig_strings.insert(orig_msg, msg.clone());
             }
             
             if self.messages.contains_key(msg.as_str()) {

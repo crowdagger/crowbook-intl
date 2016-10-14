@@ -72,7 +72,7 @@ pub fn generate_lformat(langs: &mut [Lang], extractor: &Extractor) -> String {
 
         // Add translations from exact msg formats used in lformat! to the ones
         // Used in .po files (e.g. might not have the same escape codes)
-        for (key, value) in &extractor.format_match {
+        for (key, value) in extractor.original_strings() {
             if has_arguments(key) {
                 arg_variant.push_str(&format!("    (\"{}\", $($arg:tt)*) => (lformat!(\"{}\", $($arg)*));\n",
                                               key, value));
