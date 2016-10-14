@@ -122,7 +122,11 @@ impl Extractor {
     /// Generate a pot-like file from the strings extracted from all files (if any)
     pub fn generate_pot_file(&self) -> String {
         let mut output = String::from(POT_HEADER);
-        for value in self.messages.values() {
+        let mut values = self.messages
+            .values()
+            .collect::<Vec<_>>();
+        values.sort();
+        for value in values {
             output.push_str(&format!("{}", value));
         }
         output
