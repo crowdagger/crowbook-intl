@@ -1,5 +1,11 @@
 # ChangeLog #
 
+## unreleased ##
+* In order to correctly handle multiline strings, and to make it
+  possible to use the same translation for two strings that are
+  identical but don't use backslash the same way, the API had to be
+  modified a bit. It should now work correctly-ish.
+
 ## 0.0.7 (2016-10-13 ##
 * `Extractor` now uses `escape_string` for its keys, allowing to use
   `lformat!` with multiline strings using the `\` escape at end of line. 
