@@ -1,6 +1,6 @@
 # ChangeLog #
 
-## unreleased ##
+## 0.0.8 (2016-10-14) ##
 * In order to correctly handle multiline strings, and to make it
   possible to use the same translation for two strings that are
   identical but don't use backslash the same way, the API had to be
@@ -8,7 +8,7 @@
 * Messages are now sorted (by file of apparition) before being written
   to `.pot` file.
 
-## 0.0.7 (2016-10-13 ##
+## 0.0.7 (2016-10-13) ##
 * `Extractor` now uses `escape_string` for its keys, allowing to use
   `lformat!` with multiline strings using the `\` escape at end of line. 
 
