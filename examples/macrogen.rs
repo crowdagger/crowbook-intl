@@ -1,6 +1,6 @@
-extern crate crowbook_localize;
+extern crate crowbook_intl;
 
-use crowbook_localize::{Localizer, Extractor};
+use crowbook_intl::{Localizer, Extractor};
 
 fn main() {
     let str_fr = r#"
