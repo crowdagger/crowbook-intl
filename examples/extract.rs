@@ -1,6 +1,6 @@
-extern crate crowbook_localize;
+extern crate crowbook_intl;
 
-use crowbook_localize::Extractor;
+use crowbook_intl::Extractor;
 
 fn main() {
     let mut extractor = Extractor::new();
