@@ -16,17 +16,17 @@
 //! build = "build.rs"
 //! 
 //! [build-dependencies]
-//! crowbook-localize = "0.0.9"
+//! crowbook-intl = "0.1.0"
 //!
 //! [dependencies]
-//! lazy_static = "0.2" # the generated file needs `lazy_static!`
+//! crowbook-intl-runtime = "0.1.0"
 //! ```
 //!
 //! You'll then need to create the `build.rs` file, which can look like this:
 //!
 //! ```rust,ignore
-//! extern crate crowbook_localize;
-//! use crowbook_localize::{Localizer, Extractor};
+//! extern crate crowbook_intl;
+//! use crowbook_intl::{Localizer, Extractor};
 //! 
 //! fn main() {
 //!     // Generate a `lang/default.pot` containing strings used to call `lformat!`
@@ -44,7 +44,7 @@
 //! To use it, the last step is to modify your `src/lib/lib.rs` file:
 //!
 //! ```rust,ignore
-//! #[macro_use] extern crate lazy_static;
+//! extern crate crowbook_intl_runtime;
 //! #[macro_use] mod localize_macros;
 //! ```
 //!
