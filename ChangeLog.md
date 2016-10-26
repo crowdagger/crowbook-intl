@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 0.1.0 (unreleased) ##
+* Renamed library `crowbook-localize` to `crowbook-intl`.
+
 ## 0.0.9 (2016-10-26) ##
 * Make it possible to `include!` the generated macro files from
   `OUT_DIR`, and document this way of doing.

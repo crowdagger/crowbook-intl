@@ -1,12 +1,12 @@
 [package]
-name = "crowbook-localize"
+name = "crowbook-intl"
 version = "0.1.0-pre"
 authors = ["Elisabeth Henry <liz.henry@ouvaton.org>"]
-description = "A library to localize strings, translating them according to runtime options.Using macros."
+description = "An internationalization library to localize strings, translating them according to runtime option, using macros."
 readme = "README.md"
-keywords = ["localize"]
-repository = "https://github.com/lise-henry/crowbook-localize/"
-documentation = "https://docs.rs/crowbook-localize"
+keywords = ["localization", "internationalization"]
+repository = "https://github.com/lise-henry/crowbook-intl/"
+documentation = "https://docs.rs/crowbook-intl"
 license = "MPL-2.0"
 publish = true
 
