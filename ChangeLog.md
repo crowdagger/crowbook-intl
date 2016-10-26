@@ -1,5 +1,9 @@
 # ChangeLog #
 
+## 0.0.9 (2016-10-26) ##
+* Make it possible to `include!` the generated macro files from
+  `OUT_DIR`, and document this way of doing.
+
 ## 0.0.8 (2016-10-14) ##
 * In order to correctly handle multiline strings, and to make it
   possible to use the same translation for two strings that are
