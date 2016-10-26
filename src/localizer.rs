@@ -15,7 +15,7 @@ use std::io::Write;
 /// # Example
 ///
 /// ```rust
-/// use crowbook_localize::{Localizer, Extractor};
+/// use crowbook_intl::{Localizer, Extractor};
 /// let fr = r#"
 /// msgid "Hello, {}"
 /// msgstr "Bonjour, {}"

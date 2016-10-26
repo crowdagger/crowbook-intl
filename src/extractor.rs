@@ -24,7 +24,7 @@ use walkdir::WalkDir;
 /// # Example
 ///
 /// ```
-/// use crowbook_localize::Extractor;
+/// use crowbook_intl::Extractor;
 /// let mut extractor = Extractor::new();
 /// extractor.add_messages_from_dir("src/").unwrap();
 /// println!("{}", extractor.generate_pot_file());
