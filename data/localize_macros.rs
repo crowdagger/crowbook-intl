@@ -4,13 +4,13 @@
 // # Usage:
 //
 // ```rust, no_run
+// extern crate crowbook_intl_runtime;
 // #[macro_use] mod localize_macros;
-// use localize_macros::set_lang;
-// set_lang("en");
+// crowbook_intl_runtime::set_lang("en");
 // lformat!("Hello, {}", name);
 // set_lang("fr");
 // lformat!("Hello, {}", name);
 // ```
 
-use crowbook_intl_runtime;
+extern crate crowbook_intl_runtime;
 
