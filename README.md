@@ -14,7 +14,7 @@ First, you'll need to add the following to your `Cargo.toml` file:
 build = "build.rs"
 
 [build-dependencies]
-crowbook-localize = "0.0.8"
+crowbook-localize = "0.0.9"
 
 [dependencies]
 lazy_static = "0.2" # the generated file needs `lazy_static!`
@@ -69,7 +69,13 @@ And load it in your `build.rs` file:
 ```rust
 let mut localizer = Localizer::new();
 localizer.add_lang("fr", include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/lang/fr.mp"))).unwrap();
-localizer.write_macro_file("...");
+localizer.write_macro_file(concat!(env!("OUT_DIR"), "/localize_macros.rs")).unwrap();
+```
+
+You'll also need to `include!` the result of this build script into a `localize_macros.rs` file:
+
+```rust
+include!(concat!(env!("OUT_DIR"), "/localize_macros.rs"));
 ```
 
 Once *this* is done, you can use the `localize_macros::set_lang` function
@@ -86,15 +92,17 @@ println!("{}", lformat!("Hello, world!")); // prints "Bonjour le monde !"
 ## Updating your translation
 
 When you add new strings that need to be translated (by more calls to `lformat!`),
-or when you change the content of existing strings, you can use [Gettext's `msgmerge`](https://www.gnu.org/software/gettext/manual/html_node/msgmerge-Invocation.html)
-command to update your translation. While it is not guaranteed that the formats are
-strictly identicals, it should work. (That is, it is a bug if it doesn't; but at this
+or when you change the content of existing strings, you can use [Gettext's `msgmerge` and `msgcmp`](https://www.gnu.org/software/gettext/manual/html_node/msgmerge-Invocation.html)
+commands to update your translation. While it is not guaranteed that the formats are
+strictly identical, it should work. (That is, it is a bug if it doesn't; but at this
 stage, this library is absolutely not guaranteed to be bug-free.)
 
-## Warning
+# Warning
 
 In case the complexity of the operation didn't discourage you, I should warn you
 that this library is highly experimental at this time.
+
+
 
 ## Documentation ##
 
