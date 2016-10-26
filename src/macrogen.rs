@@ -52,7 +52,7 @@ pub fn generate_lformat(langs: &mut [Lang], extractor: &Extractor) -> String {
                                         key));
             }
             
-            let this_variant = format!("        let __guard = $crate::localize_macros::__get_lang();
+            let this_variant = format!("        let __guard = crowbook_intl_runtime::__get_lang();
         match __guard.as_str() {{
 {}        }}",
             inner);
