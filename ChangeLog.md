@@ -2,10 +2,13 @@
 
 ## 0.1.0 (unreleased) ##
 * Renamed library `crowbook-localize` to `crowbook-intl`.
+* Requires `rustc` >= 1.13.0.
 * Split library between `crowbook-intl` and
   `crowbook-intl-runtime`. The latter defines some runtime functions
   used by the generated macros. This split (should) allow to have
   multiple libraries using `crowbook-intl` in the same program.
+* `Localizer::write_macro_file` now takes an `AsRef<Path>` instead of
+  an `&str`.
 
 ## 0.0.9 (2016-10-26) ##
 * Make it possible to `include!` the generated macro files from
