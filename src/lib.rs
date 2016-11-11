@@ -39,7 +39,7 @@
 //!     // Use env::var instead of env! to avoid problems when cross-compiling
 //!     let dest_path = Path::new(&env::var("OUT_DIR").unwrap())
 //!        .join("localize_macros.rs");
-//!     localizer.write_macro_file(dest_path.to_str().unwrap()).unwrap();
+//!     localizer.write_macro_file(dest_path).unwrap();
 //! }
 //! ```
 //!
