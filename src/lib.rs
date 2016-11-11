@@ -36,12 +36,21 @@
 //!
 //!     // Generate the `localize_macros.rs` file
 //!     let mut localizer = Localizer::new(&extractor);
-//!     localizer.write_macro_file(concat!(env!("CARGO_MANIFEST_DIR"), "/src/lib/localize_macros.rs")).unwrap();
+//!     // Use env::var instead of env! to avoid problems when cross-compiling
+//!     let dest_path = Path::new(&env::var("OUT_DIR").unwrap())
+//!        .join("localize_macros.rs");
+//!     localizer.write_macro_file(dest_path.to_str().unwrap()).unwrap();
 //! }
 //! ```
 //!
-//! This way, a `localize_macros.rs` file will be created at build time in `src/lib`.
-//! To use it, the last step is to modify your `src/lib/lib.rs` file:
+//! This will create a `localize_macros.rs` at build time somewhere in `OUT_DIR`, containing the `lformat!` macro.
+//! To actually use this macro, you have to create a `src/localize_macros.rs` file that includes it:
+//!
+//! ```rust,ignore
+//! include!(concat!(env!("OUT_DIR"), "/localize_macros.rs"));
+//! ```
+//!
+//! //! To use it, the last step is to modify your `src/lib/lib.rs` file:
 //!
 //! ```rust,ignore
 //! extern crate crowbook_intl_runtime;
@@ -58,6 +67,7 @@
 //! ```rust,ignore
 //! println!("{}", lformat!("Hello, world!"));
 //! ```
+//!
 //! and you want it translated in french, you'll have to create a `lang/fr.po` file
 //! from the `lang/default.pot` file containing:
 //!
@@ -71,20 +81,14 @@
 //! ```rust,ignore
 //! let mut localizer = Localizer::new();
 //! localizer.add_lang("fr", include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/lang/fr.mp"))).unwrap();
-//! localizer.write_macro_file(concat!(env!("OUT_DIR"), "/localize_macros.rs")).unwrap();
-//! ```
-//!
-//! You'll also need to `include!` the result of this build script into a `localize_macros.rs` file:
-//!
-//! ```rust,ignore
-//! include!(concat!(env!("OUT_DIR"), "/localize_macros.rs"));
+//! (...)
 //! ```
 //!
 //! Once *this* is done, you can use the `localize_macros::set_lang` function
 //! to switch the language at runtime:
 //!
 //! ```rust,ignore
-//! use localize_macros::set_lang;
+//! use crowbook_intl_runtime::set_lang;
 //! set_lang("en");
 //! println!("{}", lformat!("Hello, world!")); // prints "Hello, world!"
 //! set_lang("fr");
