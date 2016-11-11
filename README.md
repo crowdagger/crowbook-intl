@@ -1,4 +1,4 @@
-# crowbook-localize
+# crowbook-intl
 
 A library to localize strings, translating them according to runtime options.
 
@@ -107,7 +107,7 @@ that this library is highly experimental at this time.
 ## Documentation ##
 
 See the
-[documentation on docs.rs](https://docs.rs/crowbook-localize).
+[documentation on docs.rs](https://docs.rs/crowbook-intl).
 
 ## ChangeLog ##
 
