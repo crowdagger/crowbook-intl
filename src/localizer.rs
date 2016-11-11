@@ -8,6 +8,7 @@ use macrogen;
 use extractor::Extractor;
 
 use std::fs::File;
+use std::path::Path;
 use std::io::Write;
 
 /// Main struct for initiating localization for a project.
@@ -52,7 +53,7 @@ impl<'a> Localizer<'a> {
     /// * `s`: a string containing localization information. It should be foramtted
     /// similarly to gettext `mo` files.
     pub fn add_lang<S: Into<String>>(&mut self, lang: S, s: &str) -> Result<()> {
-        let lang = try!(Lang::new_from_str(lang, s));
+        let lang = Lang::new_from_str(lang, s)?;
         self.langs.push(lang);
         Ok(())
     }
@@ -63,13 +64,16 @@ impl<'a> Localizer<'a> {
     }
 
     /// Write the `localization_macros.rs` file to a file.
-    pub fn write_macro_file(self, file: &str) -> Result<()> {
-        let mut f = try!(File::create(file).map_err(|e| Error::new(format!("Could not create file {}: {}",
-                                                                              file, e))));
+    pub fn write_macro_file<P:AsRef<Path>>(self, file: P) -> Result<()> {
+        let mut f = File::create(file.as_ref())
+            .map_err(|e| Error::new(format!("Could not create file {file}: {error}",
+                                            file = file.as_ref().display(),
+                                            error = e)))?;
         let content = self.generate_macro_file();
-        try!(f.write_all(content.as_bytes())
-             .map_err(|e| Error::new(format!("Could not write to file {}: {}",
-                                             file, e))));
+        f.write_all(content.as_bytes())
+             .map_err(|e| Error::new(format!("Could not write to file {file}: {error}",
+                                             file = file.as_ref().display(),
+                                             error = e)))?;
         Ok(())
     }
 }
