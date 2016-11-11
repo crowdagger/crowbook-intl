@@ -41,10 +41,10 @@ impl Message {
 
 impl fmt::Display for Message {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        try!(write!(f, "#:"));
+        write!(f, "#:")?;
         for comment in &self.comments {
             match *comment {
-                Comment::Source(ref file, line) => try!(write!(f, " {}:{}", file, line)),
+                Comment::Source(ref file, line) => write!(f, " {}:{}", file, line)?,
             }
         }
         writeln!(f, "
