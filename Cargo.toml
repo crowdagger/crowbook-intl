@@ -8,7 +8,7 @@ keywords = ["localization", "internationalization"]
 repository = "https://github.com/lise-henry/crowbook-intl/"
 documentation = "https://docs.rs/crowbook-intl"
 license = "MPL-2.0"
-publish = false
+publish = true
 
 [dependencies]
 lazy_static = "0.2"
