@@ -1,8 +1,8 @@
 [package]
-name = "crowbook-localize"
-version = "0.1.0"
+name = "crowbook-intl"
+version = "0.1.0-pre"
 authors = ["Elisabeth Henry <liz.henry@ouvaton.org>"]
-description = "This crate has been renamed crowbook-intl."
+description = "An internationalization library to localize strings, translating them according to runtime option, using macros."
 readme = "README.md"
 keywords = ["localization", "internationalization"]
 repository = "https://github.com/lise-henry/crowbook-intl/"
