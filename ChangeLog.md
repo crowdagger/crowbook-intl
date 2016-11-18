@@ -1,6 +1,6 @@
 # ChangeLog #
 
-## 0.1.0 (unreleased) ##
+## 0.1.0 (2016-11-18) ##
 * Renamed library `crowbook-localize` to `crowbook-intl`.
 * Requires `rustc` >= 1.13.0.
 * Split library between `crowbook-intl` and
