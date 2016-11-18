@@ -2,7 +2,7 @@
 name = "crowbook-localize"
 version = "0.1.0"
 authors = ["Elisabeth Henry <liz.henry@ouvaton.org>"]
-description = "This crate has been renamed crowbook-intl. Please use this one fom now on."
+description = "This crate has been renamed crowbook-intl."
 readme = "README.md"
 keywords = ["localization", "internationalization"]
 repository = "https://github.com/lise-henry/crowbook-intl/"
