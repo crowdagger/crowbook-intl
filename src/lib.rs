@@ -50,7 +50,7 @@
 //! include!(concat!(env!("OUT_DIR"), "/localize_macros.rs"));
 //! ```
 //!
-//! //! To use it, the last step is to modify your `src/lib/lib.rs` file:
+//! To use it, the last step is to modify your `src/lib/lib.rs` file:
 //!
 //! ```rust,ignore
 //! extern crate crowbook_intl_runtime;
