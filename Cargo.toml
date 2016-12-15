@@ -13,4 +13,4 @@ publish = true
 [dependencies]
 lazy_static = "0.2"
 regex = "0.1"
-walkdir = "0.1"
+walkdir = "1"
