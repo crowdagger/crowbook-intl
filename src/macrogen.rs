@@ -84,7 +84,8 @@ pub fn generate_lformat(langs: &mut [Lang], extractor: &Extractor) -> String {
     }
 
     format!("/// Localized format macro (or `lformat!` in short)
-/// Should be similar to `format!`, except strings are localized
+///
+/// Should be similar to `format!`, except strings are localized.
 /// Generated automatically, you should not edit it.
 #[macro_export] macro_rules! lformat {{
 {}{}    ($($arg:tt)*) => (format!($($arg)*));
