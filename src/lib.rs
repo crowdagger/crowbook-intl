@@ -103,6 +103,13 @@
 //! strictly identical, it should work. (That is, it is a bug if it doesn't; but at this
 //! stage, this library is absolutely not guaranteed to be bug-free.)
 //!
+//! # Known limitations and bugs
+//!
+//! * Currently, `crowbook-intl` doesn't handle correctly raw string literals in `lformat!`
+//!   (they won't be translated correctly).
+//! * Multiple calls to the same string, but formatted differently (e.g. using a backslash
+//!   before a newline to separate a string on multiple lines) will also cause problems.
+//!
 //! # Warning
 //!
 //! In case the complexity of the operation didn't discourage you, I should warn you
