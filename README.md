@@ -14,17 +14,17 @@ First, you'll need to add the following to your `Cargo.toml` file:
 build = "build.rs"
 
 [build-dependencies]
-crowbook-localize = "0.0.9"
+crowbook-intl = "0.1.0"
 
 [dependencies]
-lazy_static = "0.2" # the generated file needs `lazy_static!`
+crowbook-intl-runtime = "0.1.0"
 ```
 
 You'll then need to create the `build.rs` file, which can look like this:
 
-```rust
-extern crate crowbook_localize;
-use crowbook_localize::{Localizer, Extractor};
+```rust,ignore
+extern crate crowbook_intl;
+use crowbook_intl::{Localizer, Extractor};
 
 fn main() {
     // Generate a `lang/default.pot` containing strings used to call `lformat!`
@@ -34,15 +34,24 @@ fn main() {
 
     // Generate the `localize_macros.rs` file
     let mut localizer = Localizer::new(&extractor);
-    localizer.write_macro_file(concat!(env!("CARGO_MANIFEST_DIR"), "/src/lib/localize_macros.rs")).unwrap();
+    // Use env::var instead of env! to avoid problems when cross-compiling
+    let dest_path = Path::new(&env::var("OUT_DIR").unwrap())
+       .join("localize_macros.rs");
+    localizer.write_macro_file(dest_path).unwrap();
 }
 ```
 
-This way, a `localize_macros.rs` file will be created at build time in `src/lib`.
+This will create a `localize_macros.rs` at build time somewhere in `OUT_DIR`, containing the `lformat!` macro.
+To actually use this macro, you have to create a `src/localize_macros.rs` file that includes it:
+
+```rust,ignore
+include!(concat!(env!("OUT_DIR"), "/localize_macros.rs"));
+```
+
 To use it, the last step is to modify your `src/lib/lib.rs` file:
 
-```rust
-#[macro_use] extern crate lazy_static;
+```rust,ignore
+extern crate crowbook_intl_runtime;
 #[macro_use] mod localize_macros;
 ```
 
@@ -53,9 +62,10 @@ files, and set your `build.rs` to load them.
 
 E.g., if you have the following code:
 
-```rust
+```rust,ignore
 println!("{}", lformat!("Hello, world!"));
 ```
+
 and you want it translated in french, you'll have to create a `lang/fr.po` file
 from the `lang/default.pot` file containing:
 
@@ -66,23 +76,17 @@ msgstr "Bonjour le monde !";
 
 And load it in your `build.rs` file:
 
-```rust
+```rust,ignore
 let mut localizer = Localizer::new();
 localizer.add_lang("fr", include_str!(concat!(env!("CARGO_MANIFEST_DIR"), "/lang/fr.mp"))).unwrap();
-localizer.write_macro_file(concat!(env!("OUT_DIR"), "/localize_macros.rs")).unwrap();
-```
-
-You'll also need to `include!` the result of this build script into a `localize_macros.rs` file:
-
-```rust
-include!(concat!(env!("OUT_DIR"), "/localize_macros.rs"));
+(...)
 ```
 
 Once *this* is done, you can use the `localize_macros::set_lang` function
 to switch the language at runtime:
 
-```rust
-use localize_macros::set_lang;
+```rust,ignore
+use crowbook_intl_runtime::set_lang;
 set_lang("en");
 println!("{}", lformat!("Hello, world!")); // prints "Hello, world!"
 set_lang("fr");
@@ -97,12 +101,22 @@ commands to update your translation. While it is not guaranteed that the formats
 strictly identical, it should work. (That is, it is a bug if it doesn't; but at this
 stage, this library is absolutely not guaranteed to be bug-free.)
 
-# Warning
+## Known limitations and bugs
+
+* Currently, `crowbook-intl` doesn't handle correctly raw string literals in `lformat!`
+  (they won't be translated correctly).
+* Multiple calls to the same string, but formatted differently (e.g. using a backslash
+  before a newline to separate a string on multiple lines) will also cause problems.
+
+## Warning
 
 In case the complexity of the operation didn't discourage you, I should warn you
 that this library is highly experimental at this time.
 
+## License
 
+This is free software, published under the [Mozilla Public License,
+version 2.0](https://www.mozilla.org/en-US/MPL/2.0/).
 
 ## Documentation ##
 
@@ -116,9 +130,3 @@ See [the ChangeLog file](ChangeLog.md).
 ## Author ##
 
 [Élisabeth Henry](http://lise-henry.github.io/) <liz.henry@ouvaton.org>. 
-
-## License ##
-
-This is free software, published under the [Mozilla Public License,
-version 2.0](https://www.mozilla.org/en-US/MPL/2.0/).
-
