@@ -114,6 +114,11 @@
 //!
 //! In case the complexity of the operation didn't discourage you, I should warn you
 //! that this library is highly experimental at this time.
+//!
+//! # License
+//!
+//! This is free software, published under the [Mozilla Public License,
+//! version 2.0](https://www.mozilla.org/en-US/MPL/2.0/).
 
 
 extern crate regex;
