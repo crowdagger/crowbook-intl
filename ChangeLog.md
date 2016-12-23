@@ -1,5 +1,10 @@
 # ChangeLog #
 
+## 0.2.0 (2016-12-23) ##
+* Fix use of `crowbook-intl-runtime` in macro generation. This might
+  be a breaking change in some cases.
+* Structs now derive `Debug` and `Clone`.
+
 ## 0.1.0 (2016-11-18) ##
 * Renamed library `crowbook-localize` to `crowbook-intl`.
 * Requires `rustc` >= 1.13.0.
