@@ -12,13 +12,4 @@
 // lformat!("Hello, {}", name);
 // ```
 
-use crowbook_intl_runtime;
-
-use std::sync::RwLockReadGuard;
-
-#[doc(hidden)]
-pub fn __get_lang() -> RwLockReadGuard<'static, String> {
-    crowbook_intl_runtime::__get_lang()
-}
-
 
