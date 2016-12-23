@@ -31,6 +31,7 @@ use std::io::Write;
 /// localizer.add_lang("es", es).unwrap();
 /// println!("{}", localizer.generate_macro_file());
 /// ```
+#[derive(Debug, Clone)]
 pub struct Localizer<'a> {
     langs: Vec<Lang>,
     extractor: &'a Extractor,

@@ -6,7 +6,7 @@ use std::fmt;
 use common::escape_string;
 
 /// Represents a comment concerning the location/translation of a message
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
 pub enum Comment {
     /// File and line
     Source(String, usize)
@@ -15,7 +15,7 @@ pub enum Comment {
 
 /// Represents a message, with a string and a list of comments
 /// corresponding to position in source file
-#[derive(Debug, PartialEq, Eq, PartialOrd, Ord)]
+#[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
 pub struct Message {
     pub comments: Vec<Comment>,
     pub msg: String,

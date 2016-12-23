@@ -8,6 +8,7 @@ use common::find_string;
 use std::collections::HashMap;
 
 /// Struct used to store localization information for a language.
+#[derive(Debug, Clone)]
 pub struct Lang {
     /// The lang code
     pub lang: String,

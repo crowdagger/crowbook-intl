@@ -34,6 +34,7 @@ use walkdir::WalkDir;
 ///
 /// This struct only add messages that are considered as needing localization,
 /// that is, the first argument of calls so `lformat!` macro.
+#[derive(Debug, Clone)]
 pub struct Extractor {
     messages: HashMap<String, Message>,
     // Matches the format string (as used by `lformat!` and the actual escaped string
