@@ -1,5 +1,8 @@
 # ChangeLog #
 
+## 0.2.1 (2017-03-04) ##
+* Update *regex* dependency to 0.2
+
 ## 0.2.0 (2016-12-23) ##
 * Fix use of `crowbook-intl-runtime` in macro generation. This might
   be a breaking change in some cases.
