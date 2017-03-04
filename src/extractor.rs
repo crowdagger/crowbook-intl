@@ -75,10 +75,10 @@ impl Extractor {
             .map_err(|e| Error::parse(format!("could not read file {}: {}",
                                               &filename,
                                               e))));
-        content = REMOVE_COMMS.replace_all(&content, "");
+        content = REMOVE_COMMS.replace_all(&content, "").into_owned();
 
         for caps in FIND_MSGS.captures_iter(&content) {
-            let (_, pos) = caps.pos(0).unwrap();
+            let pos = caps.get(0).unwrap().end();
             let line = 1 + &content[..pos].bytes().filter(|b| b == &b'\n').count();
             
             let bytes = content[pos..].as_bytes();

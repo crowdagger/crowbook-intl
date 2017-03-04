@@ -19,7 +19,7 @@ pub fn escape_string<'a, S:Into<Cow<'a, str>>>(s: S) -> Cow<'a, str> {
 
     let s = s.into();
     if s.contains('\n') || REGEX.is_match(&s) {
-        let mut res = REGEX.replace_all(&s, "");
+        let mut res = REGEX.replace_all(&s, "").into_owned();
         res = res.replace('\n', r"\n");
         Cow::Owned(res)
     } else {
