@@ -1,6 +1,6 @@
 [package]
 name = "crowbook-intl"
-version = "0.2.1"
+version = "0.2.2"
 authors = ["Elisabeth Henry <liz.henry@ouvaton.org>"]
 description = "An internationalization library to localize strings, translating them according to runtime option, using macros."
 readme = "README.md"
@@ -11,6 +11,6 @@ license = "MPL-2.0"
 publish = true
 
 [dependencies]
-lazy_static = "0.2"
-regex = "0.2"
-walkdir = "1"
+lazy_static = "1.4"
+regex = "1.5"
+walkdir = "2.3"
