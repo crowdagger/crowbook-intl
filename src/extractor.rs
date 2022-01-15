@@ -66,15 +66,15 @@ impl Extractor {
         }
         
         let filename =  format!("{}", file.as_ref().display());
-        let mut f = try!(File::open(file)
-                         .map_err(|e| Error::parse(format!("could not open file {}: {}",
-                                                           &filename,
-                                                           e))));
+        let mut f = File::open(file)
+            .map_err(|e| Error::parse(format!("could not open file {}: {}",
+                                              &filename,
+                                              e)))?;
         let mut content = String::new();
-        try!(f.read_to_string(&mut content)
+        f.read_to_string(&mut content)
             .map_err(|e| Error::parse(format!("could not read file {}: {}",
                                               &filename,
-                                              e))));
+                                              e)))?;
         content = REMOVE_COMMS.replace_all(&content, "").into_owned();
 
         for caps in FIND_MSGS.captures_iter(&content) {
@@ -82,10 +82,10 @@ impl Extractor {
             let line = 1 + &content[..pos].bytes().filter(|b| b == &b'\n').count();
             
             let bytes = content[pos..].as_bytes();
-            let orig_msg: String = try!(find_string(bytes)
-                                   .map_err(|_| Error::parse(format!("{}:{}: could not parse as string",
-                                                                     &filename,
-                                                                     line))));
+            let orig_msg: String = find_string(bytes)
+                .map_err(|_| Error::parse(format!("{}:{}: could not parse as string",
+                                                  &filename,
+                                                  line)))?;
             let msg = escape_string(orig_msg.as_str()).into_owned();
             if msg != orig_msg {
                 self.orig_strings.insert(orig_msg, msg.clone());
@@ -114,7 +114,7 @@ impl Extractor {
                  .into_owned())
             .filter(|s| s.ends_with(".rs"));
         for filename in filtered {
-            try!(self.add_messages_from_file(&filename));
+            self.add_messages_from_file(&filename)?;
         }
 
         Ok(())
@@ -135,12 +135,12 @@ impl Extractor {
 
     /// Write a pot-like file to specified location
     pub fn write_pot_file(&mut self, file: &str) -> Result<()> {
-        let mut f = try!(File::create(file).map_err(|e| Error::new(format!("Could not create file {}: {}",
-                                                                              file, e))));
+        let mut f = File::create(file).map_err(|e| Error::new(format!("Could not create file {}: {}",
+                                                                      file, e)))?;
         let content = self.generate_pot_file();
-        try!(f.write_all(content.as_bytes())
-             .map_err(|e| Error::new(format!("Could not write to file {}: {}",
-                                             file, e))));
+        f.write_all(content.as_bytes())
+            .map_err(|e| Error::new(format!("Could not write to file {}: {}",
+                                            file, e)))?;
         Ok(())
     }
 }

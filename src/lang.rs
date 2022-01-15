@@ -53,10 +53,10 @@ impl Lang {
                 let mut s = &lines[i][end..];
                 let mut key = String::new();
                 loop {
-                    key.push_str(&try!(find_string(s.as_bytes()).map_err(|e| {
+                    key.push_str(&find_string(s.as_bytes()).map_err(|e| {
                         Error::parse(format!("initializing lang '{}' at line {}, could not parse {} as a String: {}",
                                              &lang.lang, i, s, e))
-                    })));
+                    })?);
                     if i >= lines.len() - 1 || lines[i+1].starts_with("msgstr") {
                             break;
                     } else if lines[i+1].starts_with('"') {
@@ -74,13 +74,13 @@ impl Lang {
                     let mut s = &lines[i][end..];
                     let mut value = String::new();
                     loop {
-                        value.push_str(&try!(find_string(s.as_bytes()).map_err(|e| {
-                        Error::parse(format!("initializing lang '{}' at line {}, could not parse {} as a String: {}",
-                                             &lang.lang,
-                                             i,
-                                             s,
-                                             e))
-                        })));
+                        value.push_str(&find_string(s.as_bytes()).map_err(|e| {
+                            Error::parse(format!("initializing lang '{}' at line {}, could not parse {} as a String: {}",
+                                                 &lang.lang,
+                                                 i,
+                                                 s,
+                                                 e))
+                        })?);
                         if i >= lines.len() - 1 || lines[i+1].is_empty() {
                             break;
                         } else {
