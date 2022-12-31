@@ -11,6 +11,6 @@ license = "MPL-2.0"
 publish = true
 
 [dependencies]
-lazy_static = "0.2"
-regex = "0.2"
-walkdir = "1"
+lazy_static = "1.4"
+regex = "1.7"
+walkdir = "2"
