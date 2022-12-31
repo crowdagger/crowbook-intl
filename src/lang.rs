@@ -2,8 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with
 // this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-use error::{Error,Result};
-use common::find_string;
+use crate::common::find_string;
+use crate::error::{Error, Result};
 
 use std::collections::HashMap;
 
@@ -19,7 +19,9 @@ pub struct Lang {
 impl Lang {
     /// Create a new empty Lang with no content
     pub fn new<S>(lang: S) -> Lang
-        where S: Into<String> {
+    where
+        S: Into<String>,
+    {
         Lang {
             lang: lang.into(),
             content: HashMap::new(),
@@ -36,11 +38,11 @@ impl Lang {
     /// msgstr "Translated string"
     /// ```
     pub fn new_from_str<S>(lang: S, s: &str) -> Result<Lang>
-        where S: Into<String> {
+    where
+        S: Into<String>,
+    {
         let mut lang = Self::new(lang);
-        let lines:Vec<_> = s.lines()
-            .map(|s| s.trim())
-            .collect();
+        let lines: Vec<_> = s.lines().map(|s| s.trim()).collect();
         let mut i = 0;
         while i < lines.len() {
             if lines[i].is_empty() || lines[i].starts_with("#") {
@@ -53,13 +55,15 @@ impl Lang {
                 let mut s = &lines[i][end..];
                 let mut key = String::new();
                 loop {
-                    key.push_str(&try!(find_string(s.as_bytes()).map_err(|e| {
-                        Error::parse(format!("initializing lang '{}' at line {}, could not parse {} as a String: {}",
-                                             &lang.lang, i, s, e))
-                    })));
-                    if i >= lines.len() - 1 || lines[i+1].starts_with("msgstr") {
-                            break;
-                    } else if lines[i+1].starts_with('"') {
+                    key.push_str(&find_string(s.as_bytes()).map_err(|e| {
+                        Error::parse(format!(
+                            "initializing lang '{}' at line {}, could not parse {} as a String: {}",
+                            &lang.lang, i, s, e
+                        ))
+                    })?);
+                    if i >= lines.len() - 1 || lines[i + 1].starts_with("msgstr") {
+                        break;
+                    } else if lines[i + 1].starts_with('"') {
                         i = i + 1;
                         s = lines[i];
                     } else {
@@ -74,14 +78,14 @@ impl Lang {
                     let mut s = &lines[i][end..];
                     let mut value = String::new();
                     loop {
-                        value.push_str(&try!(find_string(s.as_bytes()).map_err(|e| {
+                        value.push_str(&find_string(s.as_bytes()).map_err(|e| {
                         Error::parse(format!("initializing lang '{}' at line {}, could not parse {} as a String: {}",
                                              &lang.lang,
                                              i,
                                              s,
                                              e))
-                        })));
-                        if i >= lines.len() - 1 || lines[i+1].is_empty() {
+                        })?);
+                        if i >= lines.len() - 1 || lines[i + 1].is_empty() {
                             break;
                         } else {
                             i = i + 1;
@@ -96,8 +100,10 @@ impl Lang {
                 }
                 i += 1;
             } else {
-                return Err(Error::parse(format!("initializing lang '{}' at line {}, unexected input: '{}'",
-                                                &lang.lang, i, lines[i])));
+                return Err(Error::parse(format!(
+                    "initializing lang '{}' at line {}, unexected input: '{}'",
+                    &lang.lang, i, lines[i]
+                )));
             }
         }
         Ok(lang)
@@ -109,13 +115,13 @@ impl Lang {
     /// * `key`: the string in default language
     /// * `value`: the translation in this language
     pub fn insert<S1, S2>(&mut self, key: S1, value: S2)
-        where S1: Into<String>,
-              S2: Into<String> {
+    where
+        S1: Into<String>,
+        S2: Into<String>,
+    {
         self.content.insert(key.into(), value.into());
     }
 }
-
-
 
 #[test]
 fn lang_new_valid_1() {
@@ -130,7 +136,6 @@ msgstr "Autre chaîne"
 "#;
     Lang::new_from_str("fr", s).unwrap();
 }
-
 
 #[test]
 fn lang_new_invalid_1() {

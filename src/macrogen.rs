@@ -2,8 +2,8 @@
 // License, v. 2.0. If a copy of the MPL was not distributed with
 // this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
-use lang::Lang;
-use extractor::Extractor;
+use crate::lang::Lang;
+use crate::extractor::Extractor;
 
 /// Generate the `lformat!` macro
 pub fn generate_lformat(langs: &mut [Lang], extractor: &Extractor) -> String {

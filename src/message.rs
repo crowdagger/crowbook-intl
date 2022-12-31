@@ -3,7 +3,7 @@
 // this file, You can obtain one at https://mozilla.org/MPL/2.0/.
 
 use std::fmt;
-use common::escape_string;
+use crate::common::escape_string;
 
 /// Represents a comment concerning the location/translation of a message
 #[derive(Debug, PartialEq, Eq, PartialOrd, Ord, Clone)]
